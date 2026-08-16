@@ -14,10 +14,14 @@ const Cars = () => {
   const pickupLocation = searchParams.get('pickupLocation')
   const pickupDate = searchParams.get('pickupDate')
   const returnDate = searchParams.get('returnDate')
+  const searchQuery = searchParams.get('search') || ''
 
   const {cars, axios} = useAppContext()
 
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState(searchQuery)
+  useEffect(() => {
+  setInput(searchQuery)
+}, [searchQuery])
 
   const isSearchData = pickupLocation && pickupDate && returnDate
   const [filteredCars, setFilteredCars] = useState([])
@@ -53,10 +57,18 @@ const Cars = () => {
     isSearchData && searchCarAvailablity()
   },[])
 
-  useEffect(()=>{
-    cars.length > 0 && !isSearchData && applyFilter()
-  },[input, cars])
+  useEffect(() => {
+  if (cars.length > 0 && !isSearchData) {
+    applyFilter()
+  }
+}, [input, cars, isSearchData])
 
+ useEffect(() => {
+  if (cars.length > 0 && !isSearchData) {
+    applyFilter()
+  }
+  
+}, [input, cars, isSearchData])
   return (
     <div>
 
